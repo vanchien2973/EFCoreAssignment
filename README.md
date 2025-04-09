@@ -68,4 +68,8 @@ Dự án được tổ chức theo kiến trúc Clean Architecture với các la
 
 - Đảm bảo SQL Server đã được cài đặt và chạy trước khi thực hiện migrations
 - Nếu gặp lỗi SSL certificate, có thể thêm `TrustServerCertificate=True` vào connection string
+<<<<<<< HEAD
 - Để tạo migration mới, sử dụng lệnh: `dotnet ef migrations add [MigrationName]` 
+=======
+- Để tạo migration mới, sử dụng lệnh: `dotnet ef migrations add [MigrationName]` 
+>>>>>>> origin/master
