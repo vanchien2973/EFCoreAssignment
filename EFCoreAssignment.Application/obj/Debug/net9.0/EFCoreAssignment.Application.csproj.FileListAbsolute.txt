@@ -1,0 +1,16 @@
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/bin/Debug/net9.0/EFCoreAssignment.Application.deps.json
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/bin/Debug/net9.0/EFCoreAssignment.Application.dll
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/bin/Debug/net9.0/EFCoreAssignment.Application.pdb
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/bin/Debug/net9.0/EFCoreAssignment.Domain.dll
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/bin/Debug/net9.0/EFCoreAssignment.Domain.pdb
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/obj/Debug/net9.0/EFCoreAssignment.Application.csproj.AssemblyReference.cache
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/obj/Debug/net9.0/EFCoreAssignment.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/obj/Debug/net9.0/EFCoreAssignment.Application.AssemblyInfoInputs.cache
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/obj/Debug/net9.0/EFCoreAssignment.Application.AssemblyInfo.cs
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/obj/Debug/net9.0/EFCoreAssignment.Application.csproj.CoreCompileInputs.cache
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/obj/Debug/net9.0/EFCoreAssignment.Application.sourcelink.json
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/obj/Debug/net9.0/EFCoreAs.6C72D278.Up2Date
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/obj/Debug/net9.0/EFCoreAssignment.Application.dll
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/obj/Debug/net9.0/refint/EFCoreAssignment.Application.dll
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/obj/Debug/net9.0/EFCoreAssignment.Application.pdb
+/Users/vanchienn_/RiderProjects/AssignmentRockie/EFCoreAssignment/EFCoreAssignment.Application/obj/Debug/net9.0/ref/EFCoreAssignment.Application.dll
