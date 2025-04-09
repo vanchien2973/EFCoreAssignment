@@ -29,7 +29,7 @@ Dự án được tổ chức theo kiến trúc Clean Architecture với các la
 
 1. Clone repository từ GitHub:
    ```bash
-   git clone [https://github.com/vanchien2973/EFCoreAssignment.git]
+   git clone https://github.com/vanchien2973/EFCoreAssignment.git
    cd EFCoreAssignment
    ```
 
@@ -52,7 +52,6 @@ Dự án được tổ chức theo kiến trúc Clean Architecture với các la
 4. Tạo và cập nhật database:
    ```bash
    cd EFCoreAssignment.API
-   dotnet ef migrations add InitialCreate --startup-project ../EFCoreAssignment.API
    dotnet ef database update --startup-project ../EFCoreAssignment.API
    ```
 
