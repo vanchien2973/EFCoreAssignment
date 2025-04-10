@@ -18,8 +18,5 @@ public class CreateEmployeeDtoValidator : AbstractValidator<CreateEmployeeDto>
 
         RuleFor(x => x.DepartmentId)
             .NotEmpty().WithMessage("Department is required");
-
-        RuleFor(x => x.SalaryAmount)
-            .GreaterThan(0).WithMessage("Salary must be greater than 0");
     }
 }

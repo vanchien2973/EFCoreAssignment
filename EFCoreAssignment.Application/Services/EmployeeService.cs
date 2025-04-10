@@ -66,13 +66,7 @@ public class EmployeeService : IEmployeeService
             Id = Guid.NewGuid(),
             Name = createDto.Name,
             JoinedDate = createDto.JoinedDate,
-            DepartmentId = createDto.DepartmentId,
-            Salary = new Salary
-            {
-                Id = Guid.NewGuid(),
-                Amount = createDto.SalaryAmount,
-                EmployeeId = Guid.NewGuid()
-            }
+            DepartmentId = createDto.DepartmentId
         };
 
         await _unitOfWork.Employees.AddAsync(employee);
@@ -84,7 +78,7 @@ public class EmployeeService : IEmployeeService
             Name = employee.Name,
             JoinedDate = employee.JoinedDate,
             DepartmentId = employee.DepartmentId,
-            SalaryAmount = employee.Salary.Amount
+            SalaryAmount = 0
         };
     }
 
@@ -105,20 +99,6 @@ public class EmployeeService : IEmployeeService
         employee.Name = updateDto.Name;
         employee.JoinedDate = updateDto.JoinedDate;
         employee.DepartmentId = updateDto.DepartmentId;
-        
-        if (employee.Salary != null)
-        {
-            employee.Salary.Amount = updateDto.SalaryAmount;
-        }
-        else
-        {
-            employee.Salary = new Salary
-            {
-                Id = Guid.NewGuid(),
-                Amount = updateDto.SalaryAmount,
-                EmployeeId = employee.Id
-            };
-        }
 
         await _unitOfWork.Employees.UpdateAsync(employee);
         await _unitOfWork.CommitAsync();
