@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EFCoreAssignment.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250409080233_InitialCreate")]
+    [Migration("20250410142952_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -115,6 +115,9 @@ namespace EFCoreAssignment.Persistence.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -156,7 +159,7 @@ namespace EFCoreAssignment.Persistence.Migrations
                     b.HasOne("EFCoreAssignment.Domain.Entities.Department", "Department")
                         .WithMany("Employees")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Department");

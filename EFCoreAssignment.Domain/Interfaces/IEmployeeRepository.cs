@@ -9,7 +9,8 @@ public interface IEmployeeRepository
     Task AddAsync(Employee employee);
     Task UpdateAsync(Employee employee);
     Task DeleteAsync(Guid id);
-    Task<IEnumerable<Employee>> GetEmployeesWithDepartmentsAsync();
-    Task<IEnumerable<Employee>> GetEmployeesWithProjectsAsync();
-    Task<IEnumerable<Employee>> GetHighEarningRecentEmployeesAsync();
+    Task<bool> ExistsAsync(Guid id);
+    Task<IEnumerable<Employee>> GetAllEmployeesWithDepartmentsAsync();
+    Task<IEnumerable<Employee>> GetAllEmployeesWithProjectsAsync();
+    Task<IEnumerable<Employee>> GetFilteredEmployeesAsync(DateTime fromDate, decimal minSalary);
 }

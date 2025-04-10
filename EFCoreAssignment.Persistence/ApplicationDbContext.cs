@@ -6,11 +6,11 @@ namespace EFCoreAssignment.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public DbSet<Department?> Departments { get; set; }
-    public DbSet<Employee?> Employees { get; set; }
-    public DbSet<Project?> Projects { get; set; }
-    public DbSet<ProjectEmployee?> ProjectEmployees { get; set; }
-    public DbSet<Salary?> Salaries { get; set; }
+    public DbSet<Department> Departments { get; set; }
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Project> Projects { get; set; }
+    public DbSet<ProjectEmployee> ProjectEmployees { get; set; }
+    public DbSet<Salary> Salaries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

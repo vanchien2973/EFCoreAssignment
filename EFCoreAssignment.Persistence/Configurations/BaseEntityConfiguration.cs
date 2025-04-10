@@ -8,12 +8,15 @@ public abstract class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> w
 {
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {
+        builder.Property(x => x.Id)
+            .IsRequired();
+
         builder.Property(x => x.CreatedAt)
             .IsRequired()
-            .HasDefaultValueSql("GETDATE()");
+            .HasDefaultValueSql("GETUTCDATE()");
             
         builder.Property(x => x.UpdatedAt)
             .IsRequired()
-            .HasDefaultValueSql("GETDATE()");
+            .HasDefaultValueSql("GETUTCDATE()");
     }
 }

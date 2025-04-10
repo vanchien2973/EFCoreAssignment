@@ -9,4 +9,6 @@ public interface IDepartmentRepository
     Task AddAsync(Department department);
     Task UpdateAsync(Department department);
     Task DeleteAsync(Guid id);
+    Task<bool> ExistsAsync(Guid id);
+    Task<bool> NameExistsAsync(string name);
 }

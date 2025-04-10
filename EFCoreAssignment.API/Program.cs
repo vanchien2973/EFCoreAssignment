@@ -1,6 +1,19 @@
+using EFCoreAssignment.Application.DTOs.Department;
+using EFCoreAssignment.Application.DTOs.Employee;
+using EFCoreAssignment.Application.DTOs.Project;
+using EFCoreAssignment.Application.DTOs.ProjectEmployee;
+using EFCoreAssignment.Application.DTOs.Salary;
+using EFCoreAssignment.Application.Interfaces;
+using EFCoreAssignment.Application.Services;
+using EFCoreAssignment.Application.Validators.Department;
+using EFCoreAssignment.Application.Validators.Employee;
+using EFCoreAssignment.Application.Validators.Project;
+using EFCoreAssignment.Application.Validators.ProjectEmployee;
+using EFCoreAssignment.Application.Validators.Salary;
 using EFCoreAssignment.Domain.Interfaces;
 using EFCoreAssignment.Persistence;
 using EFCoreAssignment.Persistence.Repositories;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +28,30 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IProjectEmployeeRepository, ProjectEmployeeRepository>();
 builder.Services.AddScoped<ISalaryRepository, SalaryRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Add Dependency Injection for services
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IValidator<CreateDepartmentDto>, CreateDepartmentDtoValidator>();
+builder.Services.AddScoped<IValidator<UpdateDepartmentDto>, UpdateDepartmentDtoValidator>();
+builder.Services.AddScoped<IValidator<CreateEmployeeDto>, CreateEmployeeDtoValidator>();
+builder.Services.AddScoped<IValidator<UpdateEmployeeDto>, UpdateEmployeeDtoValidator>();
+builder.Services.AddScoped<IValidator<CreateProjectDto>, CreateProjectDtoValidator>();
+builder.Services.AddScoped<IValidator<UpdateProjectDto>, UpdateProjectDtoValidator>();
+builder.Services.AddScoped<IValidator<CreateProjectEmployeeDto>, CreateProjectEmployeeDtoValidator>();
+builder.Services.AddScoped<IValidator<UpdateProjectEmployeeDto>, UpdateProjectEmployeeDtoValidator>();
+builder.Services.AddScoped<IValidator<CreateSalaryDto>, CreateSalaryDtoValidator>();
+builder.Services.AddScoped<IValidator<UpdateSalaryDto>, UpdateSalaryDtoValidator>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectEmployeeService, ProjectEmployeeService>();
+builder.Services.AddScoped<ISalaryService, SalaryService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
+
+
+
+
 
 // Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -33,11 +70,15 @@ var app = builder.Build();
 // Seed data
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
+    IServiceProvider services = scope.ServiceProvider;
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
         DataSeeder.SeedDepartments(context);
+        DataSeeder.SeedEmployees(context);
+        DataSeeder.SeedProjects(context);
+        DataSeeder.SeedSalaries(context);
+        DataSeeder.SeedProjectEmployees(context);
     }
     catch (Exception ex)
     {
