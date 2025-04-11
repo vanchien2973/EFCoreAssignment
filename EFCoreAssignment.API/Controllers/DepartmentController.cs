@@ -5,6 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EFCoreAssignment.API.Controllers;
 
+/// <summary>
+/// Department management controller
+/// Exceptions are automatically handled by ExceptionHandlingMiddleware:
+/// - KeyNotFoundException - Returns 404 Not Found
+/// - ArgumentException, InvalidOperationException - Returns 400 Bad Request
+/// - Other exceptions - Returns 500 Internal Server Error
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class DepartmentsController : ControllerBase
@@ -23,6 +30,10 @@ public class DepartmentsController : ControllerBase
         _updateValidator = updateValidator;
     }
 
+    /// <summary>
+    /// Get all departments
+    /// </summary>
+    /// <returns>List of departments</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetAll()
     {
@@ -30,14 +41,24 @@ public class DepartmentsController : ControllerBase
         return Ok(departments);
     }
 
-    [HttpGet("{id}")]
+    /// <summary>
+    /// Get department by ID
+    /// If not found, ExceptionHandlingMiddleware will catch KeyNotFoundException and return 404
+    /// </summary>
+    /// <param name="id">Department ID</param>
+    /// <returns>Department detailed information</returns>
+    [HttpGet("{id:guid}")]
     public async Task<ActionResult<DepartmentDetailDto>> GetById(Guid id)
     {
         var department = await _departmentService.GetByIdAsync(id);
-        if (department == null) return NotFound();
-        return Ok(department);
+        return Ok(department); // ExceptionHandlingMiddleware will handle NotFound
     }
 
+    /// <summary>
+    /// Create a new department
+    /// </summary>
+    /// <param name="createDto">New department information</param>
+    /// <returns>Created department</returns>
     [HttpPost]
     public async Task<ActionResult<DepartmentDto>> Create(CreateDepartmentDto createDto)
     {
@@ -47,17 +68,15 @@ public class DepartmentsController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        try
-        {
-            var department = await _departmentService.CreateAsync(createDto);
-            return CreatedAtAction(nameof(GetById), new { id = department.Id }, department);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var department = await _departmentService.CreateAsync(createDto);
+        return CreatedAtAction(nameof(GetById), new { id = department.Id }, department);
     }
 
+    /// <summary>
+    /// Update department information
+    /// </summary>
+    /// <param name="updateDto">Updated department information</param>
+    /// <returns>Processing result (204 No Content if successful)</returns>
     [HttpPut]
     public async Task<IActionResult> Update(UpdateDepartmentDto updateDto)
     {
@@ -67,36 +86,19 @@ public class DepartmentsController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        try
-        {
-            await _departmentService.UpdateAsync(updateDto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await _departmentService.UpdateAsync(updateDto);
+        return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    /// <summary>
+    /// Delete a department
+    /// </summary>
+    /// <param name="id">ID of the department to delete</param>
+    /// <returns>Processing result (204 No Content if successful)</returns>
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            await _departmentService.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await _departmentService.DeleteAsync(id);
+        return NoContent();
     }
 }

@@ -5,6 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EFCoreAssignment.API.Controllers;
 
+/// <summary>
+/// Employee salary management controller
+/// Exceptions are automatically handled by ExceptionHandlingMiddleware:
+/// - KeyNotFoundException - Returns 404 Not Found
+/// - ArgumentException, InvalidOperationException - Returns 400 Bad Request
+/// - Other exceptions - Returns 500 Internal Server Error
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class SalariesController : ControllerBase
@@ -23,6 +30,9 @@ public class SalariesController : ControllerBase
         _updateValidator = updateValidator;
     }
 
+    /// <summary>
+    /// Get all salary information
+    /// </summary>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<SalaryDto>>> GetAll()
     {
@@ -30,14 +40,21 @@ public class SalariesController : ControllerBase
         return Ok(salaries);
     }
 
+    /// <summary>
+    /// Get salary information by ID
+    /// If not found, ExceptionHandlingMiddleware will catch KeyNotFoundException and return 404
+    /// </summary>
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<SalaryDto>> GetById(Guid id)
     {
         var salary = await _salaryService.GetByIdAsync(id);
-        if (salary == null) return NotFound();
         return Ok(salary);
     }
 
+    /// <summary>
+    /// Create new salary information
+    /// Errors such as employee not found are handled by ExceptionHandlingMiddleware
+    /// </summary>
     [HttpPost]
     public async Task<ActionResult<SalaryDto>> Create(CreateSalaryDto createDto)
     {
@@ -47,25 +64,13 @@ public class SalariesController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        try
-        {
-            var salary = await _salaryService.CreateAsync(createDto);
-            return CreatedAtAction(nameof(GetById), new { id = salary.Id }, salary);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var salary = await _salaryService.CreateAsync(createDto);
+        return CreatedAtAction(nameof(GetById), new { id = salary.Id }, salary);
     }
 
+    /// <summary>
+    /// Update salary information
+    /// </summary>
     [HttpPut]
     public async Task<IActionResult> Update(UpdateSalaryDto updateDto)
     {
@@ -75,32 +80,17 @@ public class SalariesController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        try
-        {
-            await _salaryService.UpdateAsync(updateDto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await _salaryService.UpdateAsync(updateDto);
+        return NoContent();
     }
 
+    /// <summary>
+    /// Delete salary information
+    /// </summary>
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            await _salaryService.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
+        await _salaryService.DeleteAsync(id);
+        return NoContent();
     }
 }

@@ -5,6 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EFCoreAssignment.API.Controllers;
 
+/// <summary>
+/// Project employee assignment management controller
+/// Exceptions are automatically handled by ExceptionHandlingMiddleware:
+/// - KeyNotFoundException - Returns 404 Not Found
+/// - ArgumentException, InvalidOperationException - Returns 400 Bad Request
+/// - Other exceptions - Returns 500 Internal Server Error
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class ProjectEmployeesController : ControllerBase
@@ -23,6 +30,9 @@ public class ProjectEmployeesController : ControllerBase
         _updateValidator = updateValidator;
     }
 
+    /// <summary>
+    /// Get all project employee assignments
+    /// </summary>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProjectEmployeeDto>>> GetAll()
     {
@@ -30,14 +40,20 @@ public class ProjectEmployeesController : ControllerBase
         return Ok(projectEmployees);
     }
 
-    [HttpGet("{projectId}/{employeeId}")]
+    /// <summary>
+    /// Get project employee assignment by project ID and employee ID
+    /// If not found, ExceptionHandlingMiddleware will catch KeyNotFoundException and return 404
+    /// </summary>
+    [HttpGet("{projectId:guid}/{employeeId:guid}")]
     public async Task<ActionResult<ProjectEmployeeDto>> GetById(Guid projectId, Guid employeeId)
     {
         var projectEmployee = await _projectEmployeeService.GetByIdAsync(projectId, employeeId);
-        if (projectEmployee == null) return NotFound();
         return Ok(projectEmployee);
     }
 
+    /// <summary>
+    /// Create a new project employee assignment
+    /// </summary>
     [HttpPost]
     public async Task<ActionResult<ProjectEmployeeDto>> Create(CreateProjectEmployeeDto createDto)
     {
@@ -47,23 +63,15 @@ public class ProjectEmployeesController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        try
-        {
-            var projectEmployee = await _projectEmployeeService.CreateAsync(createDto);
-            return CreatedAtAction(nameof(GetById), 
-                new { projectId = projectEmployee.ProjectId, employeeId = projectEmployee.EmployeeId }, 
-                projectEmployee);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var projectEmployee = await _projectEmployeeService.CreateAsync(createDto);
+        return CreatedAtAction(nameof(GetById), 
+            new { projectId = projectEmployee.ProjectId, employeeId = projectEmployee.EmployeeId }, 
+            projectEmployee);
     }
 
+    /// <summary>
+    /// Update project employee assignment information
+    /// </summary>
     [HttpPut]
     public async Task<IActionResult> Update(UpdateProjectEmployeeDto updateDto)
     {
@@ -73,28 +81,17 @@ public class ProjectEmployeesController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        try
-        {
-            await _projectEmployeeService.UpdateAsync(updateDto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        await _projectEmployeeService.UpdateAsync(updateDto);
+        return NoContent();
     }
 
-    [HttpDelete("{projectId}/{employeeId}")]
+    /// <summary>
+    /// Delete a project employee assignment
+    /// </summary>
+    [HttpDelete("{projectId:guid}/{employeeId:guid}")]
     public async Task<IActionResult> Delete(Guid projectId, Guid employeeId)
     {
-        try
-        {
-            await _projectEmployeeService.DeleteAsync(projectId, employeeId);
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
+        await _projectEmployeeService.DeleteAsync(projectId, employeeId);
+        return NoContent();
     }
 }

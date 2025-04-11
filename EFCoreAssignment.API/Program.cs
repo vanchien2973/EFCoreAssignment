@@ -16,6 +16,7 @@ using EFCoreAssignment.Persistence.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using EFCoreAssignment.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,11 +48,6 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectEmployeeService, ProjectEmployeeService>();
 builder.Services.AddScoped<ISalaryService, SalaryService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-
-
-
-
-
 
 // Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -87,9 +83,13 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// Add custom middlewares
+app.UseExceptionHandlingMiddleware();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseRequestResponseLoggingMiddleware();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

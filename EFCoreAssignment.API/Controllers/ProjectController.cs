@@ -5,6 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EFCoreAssignment.API.Controllers;
 
+/// <summary>
+/// Project management controller
+/// Exceptions are automatically handled by ExceptionHandlingMiddleware:
+/// - KeyNotFoundException - Returns 404 Not Found
+/// - ArgumentException, InvalidOperationException - Returns 400 Bad Request
+/// - Other exceptions - Returns 500 Internal Server Error
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class ProjectsController : ControllerBase
@@ -23,6 +30,9 @@ public class ProjectsController : ControllerBase
         _updateValidator = updateValidator;
     }
 
+    /// <summary>
+    /// Get all projects
+    /// </summary>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProjectDto>>> GetAll()
     {
@@ -30,14 +40,20 @@ public class ProjectsController : ControllerBase
         return Ok(projects);
     }
 
-    [HttpGet("{id}")]
+    /// <summary>
+    /// Get project by ID
+    /// If not found, ExceptionHandlingMiddleware will catch KeyNotFoundException and return 404
+    /// </summary>
+    [HttpGet("{id:guid}")]
     public async Task<ActionResult<ProjectDetailDto>> GetById(Guid id)
     {
         var project = await _projectService.GetByIdAsync(id);
-        if (project == null) return NotFound();
         return Ok(project);
     }
 
+    /// <summary>
+    /// Create a new project
+    /// </summary>
     [HttpPost]
     public async Task<ActionResult<ProjectDto>> Create(CreateProjectDto createDto)
     {
@@ -47,17 +63,13 @@ public class ProjectsController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        try
-        {
-            var project = await _projectService.CreateAsync(createDto);
-            return CreatedAtAction(nameof(GetById), new { id = project.Id }, project);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        var project = await _projectService.CreateAsync(createDto);
+        return CreatedAtAction(nameof(GetById), new { id = project.Id }, project);
     }
 
+    /// <summary>
+    /// Update project information
+    /// </summary>
     [HttpPut]
     public async Task<IActionResult> Update(UpdateProjectDto updateDto)
     {
@@ -67,36 +79,17 @@ public class ProjectsController : ControllerBase
             return BadRequest(validationResult.Errors);
         }
 
-        try
-        {
-            await _projectService.UpdateAsync(updateDto);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await _projectService.UpdateAsync(updateDto);
+        return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    /// <summary>
+    /// Delete a project
+    /// </summary>
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            await _projectService.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await _projectService.DeleteAsync(id);
+        return NoContent();
     }
 }

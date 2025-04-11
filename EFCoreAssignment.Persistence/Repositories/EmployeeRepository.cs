@@ -89,11 +89,12 @@ public class EmployeeRepository : IEmployeeRepository
 
     public async Task<IEnumerable<Employee>> GetFilteredEmployeesAsync(DateTime fromDate, decimal minSalary)
     {
-        var sql = @"
-            SELECT e.* 
-            FROM Employees e
-            INNER JOIN Salaries s ON e.Id = s.EmployeeId
-            WHERE s.Amount > {0} AND e.JoinedDate >= {1}";
+        const string sql = """
+                               SELECT e.* 
+                               FROM Employees e
+                               INNER JOIN Salaries s ON e.Id = s.EmployeeId
+                               WHERE s.Amount > {0} AND e.JoinedDate >= {1}
+                           """;
 
         return await _context.Employees
             .FromSqlRaw(sql, minSalary, fromDate)

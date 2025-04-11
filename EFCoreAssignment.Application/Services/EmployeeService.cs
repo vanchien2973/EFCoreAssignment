@@ -20,8 +20,11 @@ public class EmployeeService : IEmployeeService
     public async Task<EmployeeDetailDto> GetByIdAsync(Guid id)
     {
         var employee = await _unitOfWork.Employees.GetByIdAsync(id);
-        if (employee == null) return null;
-
+        if (employee == null)
+        {
+            throw new KeyNotFoundException("Employee not found");
+        }
+        
         return new EmployeeDetailDto
         {
             Id = employee.Id,
